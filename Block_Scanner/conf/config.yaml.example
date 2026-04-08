@@ -1,0 +1,54 @@
+# machine id for this node
+machine_id: test
+# debug mode,support local(don't run cron job),dev,pre,prod
+mode: dev
+# scanner
+scanner:
+  # program_ids
+  program_ids:
+    - 2hd4MYiHGZxQFoYoBsTLS4QJczHDHMx1bLC41EJGDCk1
+    # - 11111111111111111111111111111111
+  # endpoint
+  endpoint:
+    http: https://api.devnet.solana.com
+    websocket: wss://api.devnet.solana.com
+  # retry config
+  retry_interval: 5s
+  max_retry_count: 5
+# db config
+database:
+  db:
+    is_cluster: false
+    source:
+      - host: 127.0.0.1
+        port: 3306
+        db_name: nebulai
+        username: root
+        password: 123123
+    replica:
+      - host: 127.0.0.1
+        port: 3306
+        db_name: nebulai
+        username: root
+        password: password
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 
+    db: 0
+    enable_tls: false
+# message queue config
+mq:
+  nsq:
+    nsqd_tcp_address: 127.0.0.1:4150
+    lookupd_http_address: 127.0.0.1:4161
+    retry_interval: 5s
+    max_retry_count: 5
+# third party config
+thrid_party:
+  notify:
+    telegram:
+      is_open: false
+      endpoint: https://api.telegram.org
+      token: 1111:xxxxx
+      chat_id: 2222

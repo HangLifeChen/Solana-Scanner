@@ -1,0 +1,57 @@
+# machine id for this node
+machine_id: prod-34.203.242.53
+# debug mode,support local(don't run cron job),dev,pre,prod
+mode: prod
+# scanner
+scanner:
+  # program_ids
+  program_ids:
+    - ENttcEea6mc1UqJV4hwXpKoixTqQokFrzTzwnNhW3toX
+    - F2hoqeAEQ3sNEFa1vYi5cTJPtwYJw2oeZgtm9TzZ3WkP
+    - AfapYi3qgfmgao4cm7VJVU9X435nvx7eFih5uZiR2nQ
+  # endpoint
+  endpoint:
+    http: https://devnet.helius-rpc.com/?api-key=bfa255c7-0b64-41a2-9c86-de6c79c2a546
+    websocket: wss://devnet.helius-rpc.com/?api-key=bfa255c7-0b64-41a2-9c86-de6c79c2a546
+    # http: https://api.devnet.solana.com
+    # websocket: wss://api.devnet.solana.com
+  # retry config
+  retry_interval: 5s
+  max_retry_count: 5
+# db config
+database:
+  db:
+    is_cluster: true
+    source:
+      - host: database-1.cmlmem88yaha.us-east-1.rds.amazonaws.com
+        port: 13306
+        db_name: nebulai_II
+        username: JasonMysql
+        password: G4b22g^&dW_=tEa39824bg1xa*s
+    replica:
+      - host: database-1-read.cmlmem88yaha.us-east-1.rds.amazonaws.com
+        port: 13306
+        db_name: nebulai_II
+        username: JasonMysql
+        password: G4b22g^&dW_=tEa39824bg1xa*s
+  redis:
+    host: master.nebulai.ckzqyw.use1.cache.amazonaws.com
+    port: 6379
+    password: 01n2Eb23(u)8Lva40ki-u9qO1pE+6n3C5o*m7Pute
+    db: 1
+    enable_tls: true
+# message queue config
+mq:
+  nsq:
+    nsqd_tcp_address: 127.0.0.1:14150
+    lookupd_http_address: 127.0.0.1:14161
+    retry_interval: 5s
+    max_retry_count: 5
+# third party config
+thrid_party:
+  notify:
+    telegram:
+      is_open: true
+      endpoint: https://api.telegram.org
+      token: 7795998247:AAHJlyPpz14_GSleKLUvgsO830rnXqeKFcE
+      chat_id: -1002330962896

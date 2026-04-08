@@ -1,0 +1,11 @@
+services:
+  nsqlookupd:
+    image: nsqio/nsq:v1.3.0
+    container_name: nsqlookupd
+    command: >
+      /nsqlookupd
+      --tcp-address=0.0.0.0:14160
+      --http-address=0.0.0.0:14161
+    ports:
+      - "14160:14160"
+      - "14161:14161"

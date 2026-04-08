@@ -1,0 +1,11 @@
+services:
+  api:
+    container_name: nebulai-block-scan-writer
+    image: ${IMAGE_NAME}
+    restart: always
+    network_mode: host
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "7"

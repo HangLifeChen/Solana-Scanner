@@ -1,0 +1,14 @@
+services:
+  nsqd:
+    image: nsqio/nsq:v1.3.0
+    container_name: nsqd
+    # Internal IP address
+    command: >
+      /nsqd
+      --tcp-address=0.0.0.0:14150
+      --http-address=0.0.0.0:14151
+      --broadcast-address=172.31.43.216
+      --lookupd-tcp-address=172.31.43.216:14160
+    ports:
+      - "14150:14150"   # TCP for nsqd clients (producers)
+      - "14151:14151"   # HTTP admin interface

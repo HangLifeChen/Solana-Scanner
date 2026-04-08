@@ -1,0 +1,55 @@
+# machine id for this node
+machine_id: pre-54.159.97.9
+# debug mode,support local(don't run cron job),dev,pre,prod
+mode: pre
+# scanner
+scanner:
+  # program_ids
+  program_ids:
+    - HWvV4Us2rzx85cDyAMLtZe5t489sxHACEKvoXnKjx3tR
+    - kCc2dNcZWTES8oSKQMriV3hAWh5ttGkbiNgoBXgdDeE
+    - JBpsmhjTYLkz5BVUywBVNAbT8oQXpDCu4nbXUhuMYLjF
+  # endpoint
+  endpoint:
+    http: https://api.devnet.solana.com
+    websocket: wss://api.devnet.solana.com
+  # retry config
+  retry_interval: 5s
+  max_retry_count: 5
+# db config
+database:
+  db:
+    is_cluster: true
+    source:
+      - host: database-1.cmlmem88yaha.us-east-1.rds.amazonaws.com
+        port: 13306
+        db_name: nebulai_lab
+        username: JasonMysql
+        password: G4b22g^&dW_=tEa39824bg1xa*s
+    replica:
+      - host: database-1-read.cmlmem88yaha.us-east-1.rds.amazonaws.com
+        port: 13306
+        db_name: nebulai_lab
+        username: JasonMysql
+        password: G4b22g^&dW_=tEa39824bg1xa*s
+  redis:
+    host: 54.159.97.9
+    port: 16379
+    password: ghmPEc0yJU06peF6
+    db: 1
+    enable_tls: false
+# message queue config
+mq:
+  nsq:
+    nsqd_tcp_address: 127.0.0.1:14150
+    lookupd_http_address: 127.0.0.1:14161
+    retry_interval: 5s
+    max_retry_count: 5
+# third party config
+thrid_party:
+  notify:
+    telegram:
+      is_open: true
+      endpoint: https://api.telegram.org
+      token: 7795998247:AAHJlyPpz14_GSleKLUvgsO830rnXqeKFcE
+      chat_id: -1002330962896
