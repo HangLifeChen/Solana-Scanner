@@ -98,6 +98,82 @@ func (o *Scanner) Run() {
 	o.wg.Wait()
 }
 
+func (o *Scanner) RunV2() {
+	if o.isWorking.Load() {
+		return
+	}
+	o.isWorking.Store(true)
+	defer o.isWorking.Store(false)
+
+	if len(o.conf.Scanner.ProgramIds) == 0 {
+		return
+	}
+
+	workerNum := 5 // 👉 可以根据情况调整
+	jobs := make(chan string, len(o.conf.Scanner.ProgramIds))
+
+	// 启动 worker
+	for i := 0; i < workerNum; i++ {
+		o.wg.Add(1)
+		go func() {
+			defer o.wg.Done()
+			for programId := range jobs {
+				o.handleProgram(programId)
+			}
+		}()
+	}
+	// 投递任务
+	for _, programId := range o.conf.Scanner.ProgramIds {
+		jobs <- programId
+	}
+	close(jobs)
+	o.wg.Wait()
+}
+func (o *Scanner) handleProgram(programId string) {
+	latestSign, ok := o.addressLatestSignMap[programId]
+	if !ok || len(latestSign) == 0 {
+		var sign string
+		err := o.db.Model(&model.Scanner{}).
+			Where("program_id =?", programId).
+			Order("slot desc").
+			Limit(1).
+			Pluck("signature", &sign).Error
+		if err != nil {
+			log.Printf("[%s] get last signature error: %v", programId, err)
+			return
+		}
+		if len(sign) > 0 {
+			o.addressLatestSignMap[programId] = sign
+		}
+		return
+	}
+
+	nextSign, blocks, err := o.httpScanner.GetSignaturesForAddress(programId, "", latestSign, 1000)
+	if err != nil {
+		log.Printf("[%s] get signatures error: %v", programId, err)
+		return
+	}
+
+	log.Printf("[%s] get last signature %s, next signature %s, block count %d",
+		programId, latestSign, nextSign, len(blocks))
+
+	if len(blocks) == 0 {
+		return
+	}
+
+	notExitSignArr, err := o.checkNotExitSign(blocks)
+	if err != nil {
+		log.Printf("[%s] check not exit sign error: %v", programId, err)
+		return
+	}
+
+	if err := o.fixSignData(programId, notExitSignArr); err != nil {
+		log.Printf("[%s] fix sign data error: %v", programId, err)
+		return
+	}
+
+	o.addressLatestSignMap[programId] = nextSign
+}
 func (o *Scanner) GetCorn() string {
 	return "*/30 * * * * *"
 }
