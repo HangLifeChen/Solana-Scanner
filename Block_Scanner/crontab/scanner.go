@@ -109,7 +109,7 @@ func (o *Scanner) RunV2() {
 		return
 	}
 
-	workerNum := 5 // 👉 可以根据情况调整
+	workerNum := 5 // 设置 worker 数量
 	jobs := make(chan string, len(o.conf.Scanner.ProgramIds))
 
 	// 启动 worker
